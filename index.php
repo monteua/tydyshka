@@ -29,11 +29,11 @@ if ( !isset($_SESSION['user_id']) ) {
     <div>
         <?php
         if ( !isset($_SESSION['user_id']) ) {
-            echo '<a href="account/register.php" class="btn btn-lg btn-primary" style="float: right; margin: 1em">Create an Account</a>';
-            echo '<a href="account/login.php" class="btn btn-lg btn-primary" style="float: right; margin-top: 1em">Log in</a>';
+            echo '<a href="account/register" class="btn btn-lg btn-primary" style="float: right; margin: 1em">Create an Account</a>';
+            echo '<a href="account/login" class="btn btn-lg btn-primary" style="float: right; margin-top: 1em">Log in</a>';
         } else {
-            echo '<a href="account/logout.php" class="btn btn-lg btn-primary" style="float: right; margin: 1em">Log out</a>';
-            echo '<a href="add.php" class="btn btn-lg btn-primary" style="float: right; margin-top: 1em">Add New Entry</a>';
+            echo '<a href="account/logout" class="btn btn-lg btn-primary" style="float: right; margin: 1em">Log out</a>';
+            echo '<a href="add" class="btn btn-lg btn-primary" style="float: right; margin-top: 1em">Add New Entry</a>';
         }
         ?>
     </div>
@@ -55,7 +55,7 @@ if ( !isset($_SESSION['user_id']) ) {
             echo '
                 <div class="quote">
                     <div class="alert alert-info" role="alert">
-                        You should <a href="account/login.php">Log In</a> or <a href="account/register.php">Create a New Account</a> in order to access all the site features
+                        You should <a href="account/login">Log In</a> or <a href="account/register">Create a New Account</a> in order to access all the site features
                     </div>
                     <p>Here\'s an inspiring quote, which would make your day brighter:</p><b>';
             echo getQuote();
@@ -79,7 +79,7 @@ if ( !isset($_SESSION['user_id']) ) {
                 echo "<tr><td><b>Name</b><td><b>Headline</b></td></td>";
                 foreach ($rows as $row) {
                     echo("<tr><td>");
-                    echo('<a href="view.php?profile_id='.$row['profile_id'].'">'
+                    echo('<a href="view?profile_id='.$row['profile_id'].'">'
                         .htmlentities($row['first_name'] . ' ' . $row['last_name']).'</a>');
                     echo("</td><td>");
                     echo(htmlentities($row['headline']));
@@ -100,13 +100,13 @@ if ( !isset($_SESSION['user_id']) ) {
             echo("<tr><td><b>Name</b><td><b>Headline</b></td></td><td><b>Action</b><td>");
             foreach ($rows as $row) {
                 echo "<tr><td>";
-                echo('<a href="view.php?profile_id='.$row['profile_id'].'">'
+                echo('<a href="view?profile_id='.$row['profile_id'].'">'
                     .htmlentities($row['first_name'] . ' ' . $row['last_name']).'</a>');
                 echo("</td><td>");
                 echo(htmlentities($row['headline']));
                 echo("</td><td>");
-                echo('<a href="edit.php?profile_id='.$row['profile_id'].'">Edit</a> / ');
-                echo('<a href="delete.php?profile_id='.$row['profile_id'].'">Delete</a>');
+                echo('<a href="edit?profile_id='.$row['profile_id'].'">Edit</a> / ');
+                echo('<a href="delete?profile_id='.$row['profile_id'].'">Delete</a>');
                 echo("</td></tr>\n");
             }
             echo '</table>';

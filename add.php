@@ -13,7 +13,7 @@ if ( ! isset($_SESSION['user_id']) ) {
             && strlen($_POST['email']) > 0 && strlen($_POST['headline']) > 0 && strlen($_POST['summary']) > 0) {
             if (strpos($_POST['email'], '@') == !true) {
                 $_SESSION['error'] = "Email must have an at-sign (@)";
-                header("Location: add.php");
+                header("Location: add");
                 return;
             } else {
                 $stmt = $pdo->prepare('INSERT INTO Profile 
@@ -30,17 +30,17 @@ if ( ! isset($_SESSION['user_id']) ) {
                 );
 
                 $_SESSION['success'] = "Record added";
-                header("Location: index.php");
+                header("Location: ../");
                 return;
             }
         } else {
             $_SESSION['error'] = "All fields are required";
-            header("Location: add.php");
+            header("Location: add");
             return;
         }
     }
 } elseif ( isset($_POST['cancel'])) {
-    header("Location: index.php");
+    header("Location: /");
     return;
 }
 

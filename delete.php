@@ -15,11 +15,11 @@ if ( ! isset($_SESSION['user_id']) ) {
 
     if ($profile == null) {
         $_SESSION['error'] = "Selected PROFILE does not exist";
-        header("Location: index.php");
+        header("Location: /");
         return;
     } elseif ($_SESSION['user_id'] !== $profile['user_id']) {
         $_SESSION['error'] = "Current user does not own this profile. Unable to remove";
-        header("Location: index.php");
+        header("Location: //");
         return;
     } else {
         if ( isset($_POST['delete']) ) {

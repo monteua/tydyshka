@@ -12,7 +12,7 @@ if ( isset($_GET['profile_id']) && is_numeric($_GET['profile_id'])) {
 
     if ( $profile == null ) {
         $_SESSION['error'] = "Selected PROFILE does not exist";
-        header("Location: index.php");
+        header("Location: //");
         return;
     }
 }
@@ -48,7 +48,7 @@ if ( isset($_GET['profile_id']) && is_numeric($_GET['profile_id'])) {
         ?>
 
         <div>
-            <br><a href="index.php">Done</a><br/>
+            <br><a href="/">Done</a><br/>
         </div>
 
 </html>

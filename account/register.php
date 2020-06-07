@@ -8,22 +8,22 @@ require_once "../baseView.php";
 $salt = 'XyZzy12*_';
 
 if ( isset($_POST['cancel'] ) ) {
-    header("Location: ../index.php");
+    header("Location: ../");
     return;
 } elseif ( isset($_POST['create']) ) {
     if ( strlen($_POST['email']) === 0 || strlen($_POST['password']) === 0 ||
         strlen($_POST['confirmPassword']) === 0 || strlen($_POST['userName']) === 0) {
         $_SESSION['error'] = "All fields are required";
-        header("Location: register.php");
+        header("Location: register");
         return;
     } else {
        if (strpos($_POST['email'], "@") === false) {
            $_SESSION['error'] = "Email must have an at-sign (@)";
-           header("Location: register.php");
+           header("Location: register");
            return;
        } elseif ($_POST['password'] !== $_POST['confirmPassword']) {
            $_SESSION['error'] = "Password confirmation does not match";
-           header("Location: register.php");
+           header("Location: register");
            return;
        } else {
            $query = $pdo->prepare("
@@ -53,11 +53,11 @@ if ( isset($_POST['cancel'] ) ) {
 
                $_SESSION['user_id'] = $account['user_id'];
                $_SESSION['success'] = "Your account was created successfully";
-               header("Location: ../index.php");
+               header("Location: ../");
                return;
            } else {
                $_SESSION['error'] = "This email address is already associated with an account.";
-               header("Location: register.php");
+               header("Location: register");
                return;
            }
        }

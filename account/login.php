@@ -6,7 +6,7 @@ require_once "../pdo.php";
 require_once "../baseView.php";
 
 if ( isset($_POST['cancel'] ) ) {
-    header("Location: ../index.php");
+    header("Location: ../");
     return;
 }
 
@@ -16,11 +16,11 @@ if ( isset($_POST['email']) && isset($_POST['password']) ) {
 
     if ( strlen($_POST['email']) < 1 || strlen($_POST['password']) < 1 ) {
         $_SESSION['error'] = "Email address and password are required";
-        header("Location: login.php");
+        header("Location: login");
         return;
     } elseif (strpos($_POST['email'], '@') ==! true ) {
         $_SESSION['error'] = "Email must have an at-sign (@)";
-        header("Location: login.php");
+        header("Location: login");
         return;
     } else {
         $password = hash('md5', $salt.$_POST['password']);
@@ -33,11 +33,11 @@ if ( isset($_POST['email']) && isset($_POST['password']) ) {
             $_SESSION['success'] = "Login success ".$_POST['email'];
             $_SESSION['user_id'] = $account['user_id'];
             error_log("Login success ".$_POST['email']);
-            header("Location: ../index.php");
+            header("Location: ../");
             return;
         } else {
             $_SESSION['error'] = "Incorrect email address or password";
-            header("Location: login.php");
+            header("Location: login");
             error_log("Login fail ".$_POST['email']." $password");
             return;
         }
