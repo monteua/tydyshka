@@ -5,16 +5,17 @@ session_start();
 require_once "pdo.php";
 require_once "baseView.php";
 require_once "inspire.php";
+require_once "./header.php";
 
 if ( !isset($_SESSION['user_id']) ) {
-    $stmt = $pdo->query("SELECT profile_id, first_name, last_name, headline 
-        FROM profile
-        WHERE user_id = (SELECT user_id FROM users WHERE email = 'test@example.com')");
+    $stmt = $pdo->query("SELECT item_id, headline, description, priority, deadline 
+        FROM entities
+        WHERE user_id = (SELECT user_id FROM users WHERE email = 'test@example.com') LIMIT 5");
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } else {
     $user_id = $_SESSION['user_id'];
-    $stmt = $pdo->query("SELECT profile_id, user_id, first_name, last_name, headline 
-        FROM profile 
+    $stmt = $pdo->query("SELECT item_id, headline, description, priority, deadline 
+        FROM entities 
         WHERE user_id = $user_id");
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -24,20 +25,8 @@ if ( !isset($_SESSION['user_id']) ) {
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="css/style.css">
     <title>TYDYSHKA</title>
-    <div>
-        <?php
-        if ( !isset($_SESSION['user_id']) ) {
-            echo '<a href="account/register" class="btn btn-lg btn-primary" style="float: right; margin: 1em">Create an Account</a>';
-            echo '<a href="account/login" class="btn btn-lg btn-primary" style="float: right; margin-top: 1em">Log in</a>';
-        } else {
-            echo '<a href="account/logout" class="btn btn-lg btn-primary" style="float: right; margin: 1em">Log out</a>';
-            echo '<a href="add" class="btn btn-lg btn-primary" style="float: right; margin-top: 1em">Add New Entry</a>';
-        }
-        ?>
-    </div>
-    <img src="images/logo.png" width="170" height="170">
+
 </head>
 <body>
     <div class="container">
@@ -58,7 +47,7 @@ if ( !isset($_SESSION['user_id']) ) {
                         You should <a href="account/login">Log In</a> or <a href="account/register">Create a New Account</a> in order to access all the site features
                     </div>
                     <p>Here\'s an inspiring quote, which would make your day brighter:</p><b>';
-            echo getQuote();
+            echo (new Inspire)->getQuote();
             echo '</b></div>
                 <div id="accordion" class="fixed-bottom">
                   <div class="card">
@@ -75,14 +64,16 @@ if ( !isset($_SESSION['user_id']) ) {
                 ';
 
             if ( $rows != null ) {
-                echo '<table border="1" class="form">';
-                echo "<tr><td><b>Name</b><td><b>Headline</b></td></td>";
+                echo '<table class="table table-hover">';
+                echo "<tr><td><b>Headline</b></td><td><b>Priority</b></td><td><b>Deadline</b></td>";
                 foreach ($rows as $row) {
                     echo("<tr><td>");
-                    echo('<a href="view?profile_id='.$row['profile_id'].'">'
-                        .htmlentities($row['first_name'] . ' ' . $row['last_name']).'</a>');
+                    echo('<a href="entity/view?item_id='.$row['item_id'].'">'
+                        .htmlentities($row['headline']));
                     echo("</td><td>");
-                    echo(htmlentities($row['headline']));
+                    echo(htmlentities($row['priority']));
+                    echo("</td><td>");
+                    echo(htmlentities($row['deadline']));
                     echo("</td></tr>\n");
                 }
                 echo '</table>';
@@ -96,18 +87,22 @@ if ( !isset($_SESSION['user_id']) ) {
             ';
 
         } elseif ( isset($_SESSION['user_id']) && $rows != null ) {
-            echo('<table border="1" class="form">');
-            echo("<tr><td><b>Name</b><td><b>Headline</b></td></td><td><b>Action</b><td>");
+            echo('<table class="table table-hover">');
+            echo('<tr><td><b>#</b></td><td><b>Headline</b></td><td><b>Priority</b></td><td><b>Deadline</b></td><td><b>Action</b></td></tr>');
+            $idx = 1;
             foreach ($rows as $row) {
-                echo "<tr><td>";
-                echo('<a href="view?profile_id='.$row['profile_id'].'">'
-                    .htmlentities($row['first_name'] . ' ' . $row['last_name']).'</a>');
+                echo '<tr><td>'.$idx.'</td><td>';
+                echo('<a href="entity/view?item_id='.$row['item_id'].'">'
+                    .htmlentities($row['headline']));
                 echo("</td><td>");
-                echo(htmlentities($row['headline']));
+                echo(htmlentities($row['priority']));
                 echo("</td><td>");
-                echo('<a href="edit?profile_id='.$row['profile_id'].'">Edit</a> / ');
-                echo('<a href="delete?profile_id='.$row['profile_id'].'">Delete</a>');
-                echo("</td></tr>\n");
+                echo(htmlentities($row['deadline']));
+                echo('</td><td>');
+                echo('<a class="btn btn-outline-primary" href="entity/edit?item_id='.$row['item_id'].'">Edit</a> ');
+                echo('<a class="btn btn-outline-danger" href="entity/delete?item_id='.$row['item_id'].'">Delete</a>');
+                echo('</td></tr>');
+                $idx += 1;
             }
             echo '</table>';
         } else {

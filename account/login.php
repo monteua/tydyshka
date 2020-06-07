@@ -49,12 +49,15 @@ if ( isset($_POST['email']) && isset($_POST['password']) ) {
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/login.css">
     <title>Account Login</title>
 </head>
 <body>
     <form method="post" class="form-signin">
-        <img src="../images/logo.png" alt="TYDYSHKA" width="150" height="150">
+        <a href="../">
+            <img src="../images/logo.png" alt="TYDYSHKA" width="150" height="150">
+        </a>
         <h1 class="h3 mb-3 font-weight-normal">Please Log In</h1>
         <?php
         if ( isset($_SESSION['error']) ) {

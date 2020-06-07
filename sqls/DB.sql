@@ -12,17 +12,18 @@ ALTER TABLE users ADD INDEX(email);
 ALTER TABLE users ADD INDEX(password);
 
 
-CREATE TABLE ToDoLists(
-  todo_id INTEGER NOT NULL AUTO_INCREMENT,
+CREATE TABLE Entities(
+  item_id INTEGER NOT NULL AUTO_INCREMENT,
   user_id INTEGER NOT NULL,
-  first_name TEXT,
-  last_name TEXT,
-  email TEXT,
   headline TEXT,
-  summary TEXT,
-  PRIMARY KEY(profile_id),
-  CONSTRAINT profile_ibfk_2
+  description TEXT,
+  priority INTEGER,
+  deadline DATE,
+  PRIMARY KEY(item_id),
+  CONSTRAINT entities_ibfk_2
   FOREIGN KEY (user_id)
   REFERENCES users (user_id)
   ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO users(name, email, password) VALUES ('Test Account', 'test@example.com', '9c36e5fbb16ab509c1eb80a652dcf446');
