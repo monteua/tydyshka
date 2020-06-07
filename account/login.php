@@ -2,15 +2,14 @@
 
 session_start();
 
-require_once "pdo.php";
-require_once "baseView.php";
+require_once "../pdo.php";
+require_once "../baseView.php";
 
 if ( isset($_POST['cancel'] ) ) {
-    header("Location: index.php");
+    header("Location: ../index.php");
     return;
 }
 
-$failure = false;  // If we have no POST data
 $salt = 'XyZzy12*_';
 
 if ( isset($_POST['email']) && isset($_POST['password']) ) {
@@ -34,7 +33,7 @@ if ( isset($_POST['email']) && isset($_POST['password']) ) {
             $_SESSION['success'] = "Login success ".$_POST['email'];
             $_SESSION['user_id'] = $account['user_id'];
             error_log("Login success ".$_POST['email']);
-            header("Location: index.php");
+            header("Location: ../index.php");
             return;
         } else {
             $_SESSION['error'] = "Incorrect email address or password";
@@ -50,12 +49,12 @@ if ( isset($_POST['email']) && isset($_POST['password']) ) {
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="../css/login.css">
     <title>Account Login</title>
 </head>
 <body>
-    <form method="POST" class="form-signin">
-        <img src="images/logo.png" alt="TYDYSHKA" width="150" height="150">
+    <form method="post" class="form-signin">
+        <img src="../images/logo.png" alt="TYDYSHKA" width="150" height="150">
         <h1 class="h3 mb-3 font-weight-normal">Please Log In</h1>
         <?php
         if ( isset($_SESSION['error']) ) {
@@ -69,7 +68,7 @@ if ( isset($_POST['email']) && isset($_POST['password']) ) {
         ?>
 
         <input type="email" name="email" id="email" class="form-control"
-               value="<?php echo isset($_POST["email"]) ? $_POST["email"] : ''; ?>" placeholder="Email Address"><br/>
+               value="<?php echo isset($_POST["email"]) ? $_POST["email"] : ''; ?>" placeholder="Email Address">
         <input type="password" name="password" id="password" class="form-control" placeholder="Password"><br/>
         <button type="submit" onclick="return doValidate();" value="Log In" class="btn btn-sm btn-primary btn-block">Log In</button>
         <button type="submit" name="cancel" value="Cancel" class="btn btn-sm btn-outline-secondary btn-block">Cancel</button>

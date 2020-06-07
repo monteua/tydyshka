@@ -72,7 +72,7 @@ if ( ! isset($_SESSION['user_id']) ) {
 
     <div class="container">
 
-        <form method="POST">
+        <form method="post">
             <div>
                 <label for="first_name">First Name:</label>
                 <input type="text" name="first_name" id="first_name" size="60"

@@ -29,10 +29,10 @@ if ( !isset($_SESSION['user_id']) ) {
     <div>
         <?php
         if ( !isset($_SESSION['user_id']) ) {
-            echo '<a href="register.php" class="btn btn-lg btn-primary" style="float: right; margin: 1em">Create an Account</a>';
-            echo '<a href="login.php" class="btn btn-lg btn-primary" style="float: right; margin-top: 1em">Log in</a>';
+            echo '<a href="account/register.php" class="btn btn-lg btn-primary" style="float: right; margin: 1em">Create an Account</a>';
+            echo '<a href="account/login.php" class="btn btn-lg btn-primary" style="float: right; margin-top: 1em">Log in</a>';
         } else {
-            echo '<a href="logout.php" class="btn btn-lg btn-primary" style="float: right; margin: 1em">Log out</a>';
+            echo '<a href="account/logout.php" class="btn btn-lg btn-primary" style="float: right; margin: 1em">Log out</a>';
             echo '<a href="add.php" class="btn btn-lg btn-primary" style="float: right; margin-top: 1em">Add New Entry</a>';
         }
         ?>
@@ -55,7 +55,7 @@ if ( !isset($_SESSION['user_id']) ) {
             echo '
                 <div class="quote">
                     <div class="alert alert-info" role="alert">
-                        You should <a href="login.php">Log In</a> or <a href="register.php">Create a New Account</a> in order to access all the site features
+                        You should <a href="account/login.php">Log In</a> or <a href="account/register.php">Create a New Account</a> in order to access all the site features
                     </div>
                     <p>Here\'s an inspiring quote, which would make your day brighter:</p><b>';
             echo getQuote();
