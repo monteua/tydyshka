@@ -2,9 +2,10 @@
 
 session_start();
 
-require_once "../pdo.php";
-require_once "../baseView.php";
-require_once "../header.php";
+require_once "../config/config.php";
+require_once ROOT_PATH."config/pdo.php";
+require_once ROOT_PATH."baseView.php";
+require_once ROOT_PATH."header.php";
 
 if ( ! isset($_SESSION['user_id']) ) {
     die('Not logged in');
@@ -17,11 +18,11 @@ if ( ! isset($_SESSION['user_id']) ) {
 
     if ($entity == null) {
         $_SESSION['error'] = "Selected Item does not exist";
-        header("Location: ../");
+        header("Location: ".BASE_URL);
         return;
     } elseif ($_SESSION['user_id'] !== $entity['user_id']) {
         $_SESSION['error'] = "Current user does not own this item. Unable to remove";
-        header("Location: ../");
+        header("Location: ".BASE_URL);
         return;
     } else {
         if ( isset($_POST['delete']) ) {
@@ -29,10 +30,10 @@ if ( ! isset($_SESSION['user_id']) ) {
                       AND user_id = :user_id');
             $stmt->execute(array('item_id' => htmlentities($_GET['item_id']), 'user_id' => $_SESSION['user_id']));
             $_SESSION['success'] = "Item removed successfully";
-            header("Location: ../");
+            header("Location: ".BASE_URL);
             return;
         } elseif ( isset($_POST['cancel'])) {
-            header("Location: ../");
+            header("Location: ".BASE_URL);
             return;
         }
     }

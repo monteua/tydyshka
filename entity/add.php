@@ -2,10 +2,12 @@
 
 session_start();
 
-require_once "../pdo.php";
-require_once "../baseView.php";
-require_once "../header.php";
-require_once "../components/datepicker.php";
+require_once "../config/config.php";
+require_once ROOT_PATH."config/pdo.php";
+require_once ROOT_PATH."baseView.php";
+require_once ROOT_PATH."header.php";
+require_once ROOT_PATH."components/datepicker.php";
+
 
 if ( !isset($_SESSION['user_id']) ) {
     die('Not logged in');
@@ -29,21 +31,21 @@ if ( !isset($_SESSION['user_id']) ) {
                 );
 
                 $_SESSION['success'] = "Record added";
-                header("Location: ../");
+                header("Location: ".BASE_URL);
                 return;
             } else {
                 $_SESSION['error'] = "Priority should be a number";
-                header("Location: add");
+                header("Location: ".BASE_URL."entity/add");
                 return;
             }
         } else {
             $_SESSION['error'] = "All fields are required";
-            header("Location: add");
+            header("Location: ".BASE_URL."entity/add");
             return;
         }
     }
 } elseif ( isset($_POST['cancel'])) {
-    header("Location: ../");
+    header("Location: ".BASE_URL);
     return;
 }
 
@@ -81,7 +83,7 @@ if ( !isset($_SESSION['user_id']) ) {
                     <br>
                     <label for="description">Description:</label>
                     <br>
-                    <textarea type="text" name="description" id="description" rows="8" cols="80"></textarea>
+                    <textarea name="description" id="description" rows="8" cols="80"></textarea>
                     <br/>
                 </div>
                     <button class="btn btn-success" id="add" type="submit" name="add" value="Add">Add</button>

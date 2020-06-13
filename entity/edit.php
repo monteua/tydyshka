@@ -2,10 +2,12 @@
 
 session_start();
 
-require_once "../pdo.php";
-require_once "../baseView.php";
-require_once "../header.php";
-require_once "../components/datepicker.php";
+require_once "../config/config.php";
+require_once ROOT_PATH."config/pdo.php";
+require_once ROOT_PATH."baseView.php";
+require_once ROOT_PATH."header.php";
+require_once ROOT_PATH."components/datepicker.php";
+
 
 if ( !isset($_SESSION['user_id']) ) {
     die('Not logged in');
@@ -18,11 +20,11 @@ if ( !isset($_SESSION['user_id']) ) {
 
     if ( $entity == null ) {
         $_SESSION['error'] = "Selected record does not exist";
-        header("Location: ../");
+        header("Location: ".BASE_URL);
         return;
     } elseif ( $_SESSION['user_id'] !== $entity['user_id'] ) {
         $_SESSION['error'] = "Current user does not own this record. Unable to edit";
-        header("Location: ../");
+        header("Location: ".BASE_URL);
         return;
     } else {
         if ( isset($_POST['headline']) && isset($_POST['description'])
@@ -48,20 +50,20 @@ if ( !isset($_SESSION['user_id']) ) {
                     );
 
                     $_SESSION['success'] = "Record updated";
-                    header("Location: ../");
+                    header("Location: ".BASE_URL);
                     return;
                 } else {
                     $_SESSION['error'] = "Priority should be a number";
-                    header("Location: ../entity/edit.php?item_id=".htmlentities($_GET['item_id']));
+                    header("Location: ".BASE_URL."entity/edit.php?item_id=".htmlentities($_GET['item_id']));
                     return;
                 }
             } else {
                 $_SESSION['error'] = "All fields are required";
-                header("Location: ../entity/edit.php?item_id=".htmlentities($_GET['item_id']));
+                header("Location: ".BASE_URL."entity/edit.php?item_id=".htmlentities($_GET['item_id']));
                 return;
             }
         } elseif ( isset($_POST['cancel'])) {
-            header("Location: ../");
+            header("Location: ".BASE_URL);
             return;
         }
     }

@@ -1,6 +1,7 @@
 <?php
 
 require 'vendor/autoload.php';
+require_once 'config/config.php';
 
 /**
  * API endpoint has a limit to 10 requests per hour
@@ -21,7 +22,7 @@ class Inspire {
             $response = json_decode($res->getBody());
             return $response->contents->quotes[0]->quote;
         } catch (Exception $e) {
-            $quotesJson = file_get_contents("json/quotes.json", true) or die("Unable to open the file");
+            $quotesJson = file_get_contents(ROOT_PATH."json/quotes.json", true) or die("Unable to open the file");
             $quotes = array(json_decode($quotesJson, true))[0];
             $quote = array_rand($quotes);
             return $quotes[$quote]['text'];

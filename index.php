@@ -2,14 +2,15 @@
 
 session_start();
 
-require_once "pdo.php";
-require_once "baseView.php";
-require_once "inspire.php";
-require_once "./header.php";
+require_once "config/config.php";
+require_once ROOT_PATH."header.php";
+require_once ROOT_PATH."baseView.php";
+require_once ROOT_PATH."config/pdo.php";
+require_once ROOT_PATH."inspire.php";
 
 if ( !isset($_SESSION['user_id']) ) {
     $stmt = $pdo->query("SELECT item_id, headline, description, priority, deadline 
-        FROM entities
+        FROM Entities
         WHERE user_id = (SELECT user_id FROM users WHERE email = 'test@example.com') LIMIT 5");
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } else {
@@ -44,7 +45,7 @@ if ( !isset($_SESSION['user_id']) ) {
             echo '
                 <div class="quote">
                     <div class="alert alert-info" role="alert">
-                        You should <a href="account/login">Log In</a> or <a href="account/register">Create a New Account</a> in order to access all the site features
+                        You should <a href="'.BASE_URL.'account/login">Log In</a> or <a href="'.BASE_URL.'account/register">Create a New Account</a> in order to access all the site features
                     </div>
                     <p>Here\'s an inspiring quote, which would make your day brighter:</p><b>';
             echo (new Inspire)->getQuote();
@@ -68,7 +69,7 @@ if ( !isset($_SESSION['user_id']) ) {
                 echo "<tr><td><b>Headline</b></td><td><b>Priority</b></td><td><b>Deadline</b></td>";
                 foreach ($rows as $row) {
                     echo("<tr><td>");
-                    echo('<a href="entity/view?item_id='.$row['item_id'].'">'
+                    echo('<a href="'.BASE_URL.'entity/view?item_id='.$row['item_id'].'">'
                         .htmlentities($row['headline']));
                     echo("</td><td>");
                     echo(htmlentities($row['priority']));
@@ -92,15 +93,15 @@ if ( !isset($_SESSION['user_id']) ) {
             $idx = 1;
             foreach ($rows as $row) {
                 echo '<tr><td>'.$idx.'</td><td>';
-                echo('<a href="entity/view?item_id='.$row['item_id'].'">'
+                echo('<a href="'.BASE_URL.'entity/view?item_id='.$row['item_id'].'">'
                     .htmlentities($row['headline']));
                 echo("</td><td>");
                 echo(htmlentities($row['priority']));
                 echo("</td><td>");
                 echo(htmlentities($row['deadline']));
                 echo('</td><td>');
-                echo('<a class="btn btn-outline-primary" href="entity/edit?item_id='.$row['item_id'].'">Edit</a> ');
-                echo('<a class="btn btn-outline-danger" href="entity/delete?item_id='.$row['item_id'].'">Delete</a>');
+                echo('<a class="btn btn-outline-primary" href="'.BASE_URL.'entity/edit?item_id='.$row['item_id'].'">Edit</a> ');
+                echo('<a class="btn btn-outline-danger" href="'.BASE_URL.'entity/delete?item_id='.$row['item_id'].'">Delete</a>');
                 echo('</td></tr>');
                 $idx += 1;
             }
@@ -115,3 +116,4 @@ if ( !isset($_SESSION['user_id']) ) {
         ?>
     </div>
 </body>
+</html>

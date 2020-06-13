@@ -2,28 +2,27 @@
 
 session_start();
 
-require_once "../pdo.php";
-require_once "../baseView.php";
-
-$salt = 'XyZzy12*_';
+require_once "../config/config.php";
+require_once ROOT_PATH."config/pdo.php";
+require_once ROOT_PATH."baseView.php";
 
 if ( isset($_POST['cancel'] ) ) {
-    header("Location: ../");
+    header("Location: ".BASE_URL);
     return;
 } elseif ( isset($_POST['create']) ) {
     if ( strlen($_POST['email']) === 0 || strlen($_POST['password']) === 0 ||
         strlen($_POST['confirmPassword']) === 0 || strlen($_POST['userName']) === 0) {
         $_SESSION['error'] = "All fields are required";
-        header("Location: register");
+        header("Location: ".BASE_URL."account/register");
         return;
     } else {
        if (strpos($_POST['email'], "@") === false) {
            $_SESSION['error'] = "Email must have an at-sign (@)";
-           header("Location: register");
+           header("Location: ".BASE_URL."account/register");
            return;
        } elseif ($_POST['password'] !== $_POST['confirmPassword']) {
            $_SESSION['error'] = "Password confirmation does not match";
-           header("Location: register");
+           header("Location: ".BASE_URL."account/register");
            return;
        } else {
            $query = $pdo->prepare("
@@ -35,7 +34,7 @@ if ( isset($_POST['cancel'] ) ) {
            $account = $query->fetch(PDO::FETCH_ASSOC);
 
            if ($account == null) {
-               $encryptedPassword = hash('md5', $salt.$_POST['password']);
+               $encryptedPassword = hash('md5', SALT.$_POST['password']);
                $query = $pdo->prepare("
                     INSERT INTO users(name, email, password) VALUES (:name, :email, :password)
                ");
@@ -53,11 +52,11 @@ if ( isset($_POST['cancel'] ) ) {
 
                $_SESSION['user_id'] = $account['user_id'];
                $_SESSION['success'] = "Your account was created successfully";
-               header("Location: ../");
+               header("Location: ".BASE_URL);
                return;
            } else {
                $_SESSION['error'] = "This email address is already associated with an account.";
-               header("Location: register");
+               header("Location: ".BASE_URL."account/register");
                return;
            }
        }
@@ -69,14 +68,14 @@ if ( isset($_POST['cancel'] ) ) {
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="../css/style.css">
-        <link rel="stylesheet" href="../css/login.css">
+        <link rel="stylesheet" href="<?php echo (BASE_URL.'css/style.css')?>">
+        <link rel="stylesheet" href="<?php echo (BASE_URL.'css/login.css')?>">
         <title>Create an Account</title>
     </head>
     <body>
         <form method="post" class="form-signin">
             <a href="../">
-                <img src="../images/logo.png" alt="TYDYSHKA" width="150" height="150">
+                <img src="<?php echo (BASE_URL.'images/logo.png')?>" alt="TYDYSHKA" width="150" height="150">
             </a>
             <h1 class="h3 mb-3 font-weight-normal">Create an Account</h1>
 

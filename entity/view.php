@@ -2,9 +2,10 @@
 
 session_start();
 
-require_once "../pdo.php";
-require_once "../baseView.php";
-require_once "../header.php";
+require_once "../config/config.php";
+require_once ROOT_PATH."config/pdo.php";
+require_once ROOT_PATH."baseView.php";
+require_once ROOT_PATH."header.php";
 
 if ( isset($_GET['item_id']) && is_numeric($_GET['item_id'])) {
     $stmt = $pdo -> prepare('SELECT item_id, headline, description, priority, deadline FROM entities 
@@ -14,11 +15,11 @@ if ( isset($_GET['item_id']) && is_numeric($_GET['item_id'])) {
 
     if ( $entity == null ) {
         $_SESSION['error'] = "Selected record does not exist";
-        header("Location: ./");
+        header("Location: ".BASE_URL);
         return;
     }
 } elseif ( isset($_GET['done']) ) {
-    header("Location: ./");
+    header("Location: ".BASE_URL);
     return;
 }
 
@@ -47,7 +48,7 @@ if ( isset($_GET['item_id']) && is_numeric($_GET['item_id'])) {
         ?>
 
         <div>
-            <br><a class="btn btn-primary" href="../">Done</a><br/>
+            <br><a class="btn btn-primary" href="<?php echo BASE_URL ?>">Done</a><br/>
         </div>
 
 </html>

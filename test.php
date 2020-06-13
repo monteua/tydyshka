@@ -1,6 +1,6 @@
 <?php
 
-$salt = 'XyZzy12*_';
+require_once './config/config.php';
 
-$password = hash('md5', $salt.'test@example.com');
+$password = hash('md5', SALT.'test@example.com');
 echo($password);
