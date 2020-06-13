@@ -1,6 +1,6 @@
 <?php
 require_once "config/config.php";
-require_once ROOT_PATH."config/pdo.php";
+require_once "config/pdo.php";
 ?>
 
 <!DOCTYPE html>

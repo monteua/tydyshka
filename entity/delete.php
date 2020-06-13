@@ -3,9 +3,9 @@
 session_start();
 
 require_once "../config/config.php";
-require_once ROOT_PATH."config/pdo.php";
-require_once ROOT_PATH."baseView.php";
-require_once ROOT_PATH."header.php";
+require_once "../config/pdo.php";
+require_once "../baseView.php";
+require_once "../header.php";
 
 if ( ! isset($_SESSION['user_id']) ) {
     die('Not logged in');

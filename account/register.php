@@ -3,8 +3,8 @@
 session_start();
 
 require_once "../config/config.php";
-require_once ROOT_PATH."config/pdo.php";
-require_once ROOT_PATH."baseView.php";
+require_once "../config/pdo.php";
+require_once "../baseView.php";
 
 if ( isset($_POST['cancel'] ) ) {
     header("Location: ".BASE_URL);
