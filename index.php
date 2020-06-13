@@ -16,7 +16,7 @@ if ( !isset($_SESSION['user_id']) ) {
 } else {
     $user_id = $_SESSION['user_id'];
     $stmt = $pdo->query("SELECT item_id, headline, description, priority, deadline 
-        FROM entities 
+        FROM Entities 
         WHERE user_id = $user_id");
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -27,7 +27,6 @@ if ( !isset($_SESSION['user_id']) ) {
 <html>
 <head>
     <title>TYDYSHKA</title>
-
 </head>
 <body>
     <div class="container">

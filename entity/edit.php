@@ -13,7 +13,7 @@ if ( !isset($_SESSION['user_id']) ) {
     die('Not logged in');
 } elseif ( isset($_GET['item_id']) && is_numeric($_GET['item_id'])) {
     $stmt = $pdo -> prepare('SELECT item_id, user_id, headline, description, priority, deadline 
-                    FROM entities 
+                    FROM Entities 
                     WHERE item_id = :item_id AND user_id = :user_id');
     $stmt -> execute(array('item_id' => htmlentities($_GET['item_id']), 'user_id' => $_SESSION['user_id']));
     $entity = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -33,7 +33,7 @@ if ( !isset($_SESSION['user_id']) ) {
                 && strlen($_POST['priority']) > 0 && strlen($_POST['deadline']) > 0 ) {
 
                 if ( is_numeric($_POST['priority']) ) {
-                    $update = $pdo->prepare('UPDATE entities SET
+                    $update = $pdo->prepare('UPDATE Entities SET
                     headline = :headline,
                     description = :description,
                     priority = :priority,

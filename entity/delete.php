@@ -11,7 +11,7 @@ if ( ! isset($_SESSION['user_id']) ) {
     die('Not logged in');
 } elseif ( isset($_GET['item_id']) && is_numeric($_GET['item_id'])) {
     $stmt = $pdo->prepare('SELECT item_id, headline, user_id, description, priority, deadline 
-                    FROM entities 
+                    FROM Entities 
                     WHERE item_id = :item_id AND user_id = :user_id');
     $stmt->execute(array('item_id' => htmlentities($_GET['item_id']), 'user_id' => $_SESSION['user_id']));
     $entity = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -26,7 +26,7 @@ if ( ! isset($_SESSION['user_id']) ) {
         return;
     } else {
         if ( isset($_POST['delete']) ) {
-            $stmt = $pdo->prepare('DELETE FROM entities WHERE item_id = :item_id 
+            $stmt = $pdo->prepare('DELETE FROM Entities WHERE item_id = :item_id 
                       AND user_id = :user_id');
             $stmt->execute(array('item_id' => htmlentities($_GET['item_id']), 'user_id' => $_SESSION['user_id']));
             $_SESSION['success'] = "Item removed successfully";

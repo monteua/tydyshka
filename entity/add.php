@@ -18,7 +18,7 @@ if ( !isset($_SESSION['user_id']) ) {
             && strlen($_POST['priority']) > 0 && strlen($_POST['deadline']) > 0 ) {
 
             if ( is_numeric($_POST['priority']) ) {
-                $stmt = $pdo->prepare('INSERT INTO entities 
+                $stmt = $pdo->prepare('INSERT INTO Entities 
                 (user_id, headline, description, priority, deadline)
                 VALUES ( :user_id, :headline, :description, :priority, :deadline )');
 
@@ -31,7 +31,7 @@ if ( !isset($_SESSION['user_id']) ) {
                 );
 
                 $_SESSION['success'] = "Record added";
-                header("Location: ".BASE_URL);
+                header("Location: ".BASE_URL, true, 301);
                 return;
             } else {
                 $_SESSION['error'] = "Priority should be a number";
