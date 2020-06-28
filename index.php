@@ -5,22 +5,8 @@ session_start();
 require_once "config/config.php";
 require_once "header.php";
 require_once "baseView.php";
-require_once "config/pdo.php";
 require_once "inspire.php";
-
-if ( !isset($_SESSION['user_id']) ) {
-    $stmt = $pdo->query("SELECT item_id, headline, description, priority, deadline 
-        FROM Entities
-        WHERE user_id = (SELECT user_id FROM users WHERE email = 'test@example.com') LIMIT 5");
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} else {
-    $user_id = $_SESSION['user_id'];
-    $stmt = $pdo->query("SELECT item_id, headline, description, priority, deadline 
-        FROM Entities 
-        WHERE user_id = $user_id");
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
+require_once "components/utils.php";
 ?>
 
 <!DOCTYPE html>
@@ -29,16 +15,15 @@ if ( !isset($_SESSION['user_id']) ) {
     <title>TYDYSHKA</title>
 </head>
 <body>
+    <script>
+        function htmlentities(str) {
+            return $("<div/>").text(str).html();
+        }
+    </script>
     <div class="container">
         <?php
 
-        if ( isset($_SESSION['error']) ) {
-            echo('<p style="color: red;">'.htmlentities($_SESSION['error'])."</p>\n");
-            unset($_SESSION['error']);
-        } elseif ( isset($_SESSION['success']) ) {
-            echo('<p style="color: green;">'.htmlentities($_SESSION['success'])."</p>\n");
-            unset($_SESSION['success']);
-        }
+        getResult();
 
         if ( !isset($_SESSION['user_id']) ) {
             echo '
@@ -61,24 +46,41 @@ if ( !isset($_SESSION['user_id']) ) {
                 
                     <div id="collapseOne" class="collapse hide" aria-labelledby="headingOne" data-parent="#accordion">
                       <div class="card-body">
+                        <table class="table table-hover" hidden id="testTable">
+                            <tr>
+                                <td><b>#</b></td>
+                                <td><b>Headline</b></td>
+                                <td><b>Priority</b></td>
+                                <td><b>Deadline</b></td>
+                            </tr>
+                            <tbody id="testData">    
+                            </tbody>
+                        </table>
                 ';
 
-            if ( $rows != null ) {
-                echo '<table class="table table-hover">';
-                echo "<tr><td><b>Headline</b></td><td><b>Priority</b></td><td><b>Deadline</b></td>";
-                foreach ($rows as $row) {
-                    echo("<tr><td>");
-                    echo('<a href="'.BASE_URL.'entity/view?item_id='.$row['item_id'].'">'
-                        .htmlentities($row['headline']));
-                    echo("</td><td>");
-                    echo(htmlentities($row['priority']));
-                    echo("</td><td>");
-                    echo(htmlentities($row['deadline']));
-                    echo("</td></tr>\n");
-                }
-                echo '</table>';
-            }
-
+            echo('
+                <script type="text/javascript">
+                    $.getJSON("getJson", function(rows) {
+                        
+                        $("#testData").empty();
+                        
+                        rows.length > 0 ? $("#testTable").removeAttr("hidden"): "";
+                        
+                        for (let i = 0; i < rows.length; i++) {
+                            
+                            let row = rows[i];
+                           
+                            $("#testData").append("<tr><td>"+(i+1)+"</td><td>"
+                                + "<a href=\\"entity/view?item_id="+htmlentities(row.item_id)+"\\">"+htmlentities(row.headline)
+                                + "</td><td>"
+                                + htmlentities(row.priority)
+                                + "</td><td>"
+                                + htmlentities(row.deadline)
+                                + "</td></tr>");
+                        }
+                    });       
+                </script>        
+            ');
             echo '
                       </div>
                     </div>
@@ -86,31 +88,51 @@ if ( !isset($_SESSION['user_id']) ) {
                 </div>
             ';
 
-        } elseif ( isset($_SESSION['user_id']) && $rows != null ) {
-            echo('<table class="table table-hover">');
-            echo('<tr><td><b>#</b></td><td><b>Headline</b></td><td><b>Priority</b></td><td><b>Deadline</b></td><td><b>Action</b></td></tr>');
-            $idx = 1;
-            foreach ($rows as $row) {
-                echo '<tr><td>'.$idx.'</td><td>';
-                echo('<a href="'.BASE_URL.'entity/view?item_id='.$row['item_id'].'">'
-                    .htmlentities($row['headline']));
-                echo("</td><td>");
-                echo(htmlentities($row['priority']));
-                echo("</td><td>");
-                echo(htmlentities($row['deadline']));
-                echo('</td><td>');
-                echo('<a class="btn btn-outline-primary" href="'.BASE_URL.'entity/edit?item_id='.$row['item_id'].'">Edit</a> ');
-                echo('<a class="btn btn-outline-danger" href="'.BASE_URL.'entity/delete?item_id='.$row['item_id'].'">Delete</a>');
-                echo('</td></tr>');
-                $idx += 1;
-            }
-            echo '</table>';
-        } else {
-            echo '
-                <div class="alert alert-warning" role="alert">
-                    Hm... Nothing was added yet.
-                </div>
-            ';
+        } elseif ( isset($_SESSION['user_id']) ) {
+            echo('
+                <table class="table table-hover" hidden id="mainTable">
+                <tr>
+                    <td><b>#</b></td>
+                    <td><b>Headline</b></td>
+                    <td><b>Priority</b></td>
+                    <td><b>Deadline</b></td>
+                    <td><b>Action</b></td>
+                </tr>
+                <tbody id="data">    
+                </tbody>
+                </table>
+            ');
+
+            echo('
+                <script type="text/javascript">
+                    let found = false;
+                    $.getJSON("getJson", function(rows) {
+                        found = rows.length > 0;
+                        $("#data").empty();
+                        
+                        found ? $("#mainTable").removeAttr("hidden"): "";
+                        
+                        for (let i = 0; i < rows.length; i++) {
+                            
+                            row = rows[i];
+                            window.console && console.log(\'Row: \'+i+\' \'+row.headline);
+                            $("#data").append("<tr><td>"+(i+1)+"</td><td>"
+                                + "<a href=\\"entity/view?item_id="+htmlentities(row.item_id)+"\\">"+htmlentities(row.headline)
+                                + "</td><td>"
+                                + htmlentities(row.priority)
+                                + "</td><td>"
+                                + htmlentities(row.deadline)
+                                + "</td><td>"
+                                + "<a class=\\"btn btn-outline-primary\\" href=\\"entity/edit?item_id="+row.item_id+"\\">Edit</a> "
+                                + "<a class=\\"btn btn-outline-danger\\" href=\\"entity/delete?item_id="+row.item_id+"\\">Delete</a>"
+                                + "</td></tr>");
+                        }
+                        if ( !found ) {
+                            $(".container").append("<div class=\\"alert alert-warning\\" role=\\"alert\\">Hm... Nothing was added yet.</div>");
+                        }
+                    });       
+                </script>        
+            ');
         }
         ?>
     </div>
