@@ -7,6 +7,7 @@ require_once "../config/pdo.php";
 require_once "../baseView.php";
 require_once "../header.php";
 require_once "../components/datepicker.php";
+require_once "../components/utils.php";
 
 
 if ( !isset($_SESSION['user_id']) ) {
@@ -62,10 +63,7 @@ if ( !isset($_SESSION['user_id']) ) {
             <form method="post">
                 <h1>Add Item</h1>
                     <?php
-                    if ( isset($_SESSION['error']) ) {
-                        echo('<br><p style="color: red;">'.htmlentities($_SESSION['error'])."</p>\n");
-                        unset($_SESSION['error']);
-                    }
+                        getResult();
                     ?>
                 <div>
                     <label for="headline">Headline:</label><br>
